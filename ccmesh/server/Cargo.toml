@@ -1,0 +1,17 @@
+[package]
+name = "hz-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+sysinfo.workspace = true
+hz-config = {path = "../config"}
+hz-mesh = {path = "../ccmesh"}
+hz-con = {path = "../con"}
+hz-opt = {path = "../opt"}
+hz-cb = {path = "../cb"}
+hz-faas = {path = "../faas"}

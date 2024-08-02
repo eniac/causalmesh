@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/eniac/ccmesh";
+package ccmesh;
+
+service Mesh {
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+  rpc ClientRead (ClientReadRequest) returns (ClientReadResponse) {}
+  rpc ClientWrite (ClientWriteRequest) returns (ClientWriteResponse) {}
+  rpc ServerWrite (ServerWriteRequest) returns (google.protobuf.Empty) {}
+  rpc IsVisible (IsVisibleRequest) returns (IsVisibleResponse) {}
+}
+
+message ClientReadRequest {
+  string key = 1;
+  string deps = 2;
+}
+
+message ClientReadResponse {
+  string value = 1;
+  string vc = 2;
+}
+
+message ClientWriteRequest {
+  string key = 1;
+  string value = 2;
+  string deps = 3;
+  string local = 4;
+}
+
+message ClientWriteResponse {
+  string vc = 1;
+}
+
+message ServerWriteRequest {
+  string key = 1;
+  string value = 2;
+  string vc = 3;
+  string deps = 4;
+  uint32 headid = 5;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  string status = 1;
+}
+
+message IsVisibleRequest {
+  string key = 1;
+  string vc = 2;
+}
+
+message IsVisibleResponse {
+  bool res = 1;
+}

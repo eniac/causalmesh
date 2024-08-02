@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/eniac/hzcb";
+package cb;
+
+service Mesh {
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+  rpc ServerRead (ServerReadRequest) returns (ServerReadResponse) {}
+  rpc ClientRead (ClientReadRequest) returns (ClientReadResponse) {}
+  rpc ClientWrite (ClientWriteRequest) returns (ClientWriteResponse) {}
+}
+
+message ClientReadRequest {
+  string key = 1;
+  string deps = 2;
+  int32 upstream = 3;
+}
+
+message ClientReadResponse {
+  string value = 1;
+  string vc = 2;
+}
+
+message ServerReadRequest {
+  string key = 1;
+}
+
+message ServerReadResponse {
+  string value = 1;
+  string vc = 2;
+}
+
+message ClientWriteRequest {
+  string key = 1;
+  string value = 2;
+  string deps = 3;
+}
+
+message ClientWriteResponse {
+  string vc = 1;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  string status = 1;
+}

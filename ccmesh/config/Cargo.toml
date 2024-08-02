@@ -1,0 +1,27 @@
+[package]
+name = "hz-config"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+lazy_static.workspace = true
+tokio.workspace = true
+hz-ipc = { path = "../ipc" }
+hz-causal = { path = "../causal" }
+
+[build-dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[features]
+default = ["opt", "cloud"]
+ccmesh = []
+opt = []
+con = []
+cb = []
+faas = []
+base = []
+local = []
+cloud = []

@@ -1,0 +1,37 @@
+[package]
+name = "scheduler"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "scheduler"
+path = "bin/main.rs"
+
+[dependencies]
+bytes.workspace = true
+tokio.workspace = true
+hyper.workspace = true
+tonic.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand.workspace = true
+lazy_static.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+rustc-hash.workspace = true
+hz-config = { path = "../config" }
+hz-workload = { path = "../workload" }
+hz-mesh = { path = "../ccmesh" }
+hz-con = { path = "../con" }
+hz-opt = { path = "../opt" }
+hz-faas = { path = "../faas" }
+hz-cb = { path = "../cb" }
+hz-causal = { path = "../causal" }
+
+[dependencies.uuid]
+version = "1.0.0-alpha.1"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]

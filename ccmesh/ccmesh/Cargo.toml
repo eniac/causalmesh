@@ -1,0 +1,28 @@
+[package]
+name = "hz-mesh"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio.workspace = true
+tonic.workspace = true
+prost.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rustc-hash.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+either.workspace = true
+once_cell.workspace = true
+flume.workspace = true
+ringbuffer.workspace = true
+bincode.workspace = true
+rand.workspace = true
+hz-causal = {path = "../causal"}
+hz-ipc = {path = "../ipc"}
+hz-config = {path = "../config"}
+hz-redis = {path = "../redis"}
+hz-workload = {path = "../workload"}
+
+[build-dependencies]
+tonic-build = "0.8"

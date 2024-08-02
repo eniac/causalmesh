@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/eniac/hzcon";
+package con;
+
+service Mesh {
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+  rpc Prepare1 (Prepare1Request) returns (Prepare1Response) {}
+  rpc Prepare2 (Prepare2Request) returns (google.protobuf.Empty) {}
+  rpc ServerRead (ServerReadRequest) returns (ServerReadResponse) {}
+  rpc CleanUp (CleanUpRequest) returns (google.protobuf.Empty) {}
+  rpc ClientRead (ClientReadRequest) returns (ClientReadResponse) {}
+  rpc ClientWrite (ClientWriteRequest) returns (ClientWriteResponse) {}
+}
+
+message Prepare1Request {
+  string id = 1;
+  repeated string ri = 2;
+  repeated string rdag = 3;
+}
+
+message Prepare1Response {
+  string metaset = 1;
+}
+
+message Prepare2Request {
+  string id = 1;
+  string rremote = 2;
+}
+
+message ServerReadRequest {
+  string id = 1;
+  repeated string ks = 2;
+}
+
+message ServerReadResponse {
+  string metaset = 1;
+}
+
+message ClientReadRequest {
+  string id = 1;
+  string key = 2;
+}
+
+message ClientReadResponse {
+  string value = 1;
+  string vc = 2;
+}
+
+message ClientWriteRequest {
+  string key = 1;
+  string value = 2;
+  string deps = 3;
+}
+
+message ClientWriteResponse {
+  string vc = 1;
+}
+
+message CleanUpRequest {
+  string id = 1;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  string status = 1;
+}

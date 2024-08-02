@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/eniac/hzfaas";
+package faas;
+
+service Mesh {
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+  rpc ClientRead (ClientReadRequest) returns (ClientReadResponse) {}
+  rpc ClientWrite (ClientWriteRequest) returns (ClientWriteResponse) {}
+}
+
+message ClientReadRequest {
+  string key = 1;
+  int32 low = 2;
+  int32 high = 3;
+}
+
+message ClientReadResponse {
+  string value = 1;
+  int32 low = 2;
+  int32 high = 3;
+  bool abort = 4;
+}
+
+message ClientWriteRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message ClientWriteResponse {
+  int64 ts = 1;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  string status = 1;
+}

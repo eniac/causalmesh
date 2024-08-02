@@ -1,0 +1,7 @@
+[
+  { "funcName": "composeReview", "funcId": 1, "minWorkers": 8, "maxWorkers": 8 },
+  { "funcName": "movieReview", "funcId": 2, "minWorkers": 4, "maxWorkers": 4 },
+  { "funcName": "userReview", "funcId": 3, "minWorkers": 4, "maxWorkers": 4 },
+  { "funcName": "reviewStorage", "funcId": 4, "minWorkers": 4, "maxWorkers": 4 }
+]
+

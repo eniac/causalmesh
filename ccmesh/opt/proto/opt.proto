@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/eniac/hzopt";
+package opt;
+
+service Mesh {
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse) {}
+  rpc Prepare (PrepareRequest) returns (PrepareResponse) {}
+  rpc ClientRead (ClientReadRequest) returns (ClientReadResponse) {}
+  rpc ClientWrite (ClientWriteRequest) returns (ClientWriteResponse) {}
+  rpc ServerRead (ServerReadRequest) returns (ServerReadResponse) {}
+  rpc CleanUp (CleanUpRequest) returns (google.protobuf.Empty) {}
+}
+
+message PrepareRequest {
+  string id = 1;
+  int32 upstream = 2;
+  repeated string keys = 3;
+  string su = 4; // map: key -> vc
+  string ru = 5; // map: key -> vc
+}
+
+message PrepareResponse {
+  bool abort = 1;
+  string su = 2;
+  string ru = 3;
+}
+
+message ClientReadRequest {
+  string id = 1;
+  string key = 2;
+}
+
+message ClientReadResponse {
+  string value = 1;
+  string vc = 2;
+}
+
+message ClientWriteRequest {
+  string key = 1;
+  string value = 2;
+  string deps = 3;
+}
+
+message ClientWriteResponse {
+  string vc = 1;
+}
+
+message ServerReadRequest {
+  string id = 1;
+  repeated string keys = 2;
+  int32 owner = 3;
+}
+
+message ServerReadResponse {
+  string res = 1; // map: K -> M
+}
+
+message CleanUpRequest {
+  string id = 1;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse {
+  string status = 1;
+}
