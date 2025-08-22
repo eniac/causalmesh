@@ -1,0 +1,5 @@
+{
+	"dafny_path": "/dafny3.13",
+	"dotnet_path": "/dotnet-sdk-6.0.319-linux-x64/dotnet",
+	"nthreads_to_compile": 16
+}
