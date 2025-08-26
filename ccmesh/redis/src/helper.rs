@@ -3,6 +3,7 @@ use hz_config::REDISIP;
 use hz_ipc::connection::Encoding;
 use redis::{Commands, Connection, ToRedisArgs};
 use serde::{de::DeserializeOwned, Serialize};
+use redis::AsyncCommands;
 use std::cell::RefCell;
 
 pub const REDIS_CODING: Encoding = Encoding::Json;

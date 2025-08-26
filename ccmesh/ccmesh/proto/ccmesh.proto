@@ -40,6 +40,7 @@ message ServerWriteRequest {
   string vc = 3;
   string deps = 4;
   uint32 headid = 5;
+  uint32 round = 6;
 }
 
 message HealthCheckRequest {

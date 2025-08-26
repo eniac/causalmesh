@@ -30,7 +30,7 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 anyhow = "1.0"
 clap = { version = "3.2.18", features = ["derive", "env"] }
-redis = { git = "https://github.com/mitsuhiko/redis-rs.git", features = ["tokio-comp"] }
+redis = { git = "https://github.com/mitsuhiko/redis-rs.git", tag = "redis-0.26.1", features = ["tokio-comp"] }
 hyper = { version = "0.14", features = ["full"] }
 rand = "0.8"
 zipf = "7.0.0"

@@ -33,7 +33,7 @@ pub fn rpc_client() -> MeshClient<tonic::transport::Channel> {
 type Black = HashMap<String, Vec<M>>;
 type White = HashMap<String, M>;
 type White2 = HashMap<String, AllocRingBuffer<M>>;
-pub static CHEKC_BLK: bool = SCALE;
+pub static CHEKC_BLK: bool = false;
 // type RPCClient = MeshClient<tonic::transport::Channel>;
 
 #[derive(Debug)]
@@ -470,53 +470,53 @@ impl Mesh for CCMeshService {
             deps,
         };
         // let start = std::time::Instant::now();
-        let m_cp = m.clone();
+        // let m_cp = m.clone();
         {
-            let mut blk = self.black.lock().unwrap();
-            for (k, m) in local.into_iter() {
-                match blk.entry(k) {
-                    Entry::Occupied(mut e) => {
-                        if CHEKC_BLK {
-                            let mut found = false;
-                            for mm in e.get_mut().iter() {
-                                if mm.vc == m.vc {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if !found {
-                                e.get_mut().push(m);
-                            }
-                        } else {
-                            e.get_mut().push(m);
-                        }
-                    }
-                    Entry::Vacant(e) => {
-                        e.insert(vec![m]);
-                    }
-                }
-            }
-            match blk.entry(key.clone()) {
-                Entry::Occupied(mut e) => {
-                    if CHEKC_BLK {
-                        let mut found = false;
-                        for mm in e.get_mut().iter() {
-                            if mm.vc == m.vc {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if !found {
-                            e.get_mut().push(m_cp);
-                        }
-                    } else {
-                        e.get_mut().push(m_cp);
-                    }
-                }
-                Entry::Vacant(e) => {
-                    e.insert(vec![m_cp]);
-                }
-            }
+            // let mut blk = self.black.lock().unwrap();
+            // for (k, m) in local.into_iter() {
+            //     match blk.entry(k) {
+            //         Entry::Occupied(mut e) => {
+            //             if CHEKC_BLK {
+            //                 let mut found = false;
+            //                 for mm in e.get_mut().iter() {
+            //                     if mm.vc == m.vc {
+            //                         found = true;
+            //                         break;
+            //                     }
+            //                 }
+            //                 if !found {
+            //                     e.get_mut().push(m);
+            //                 }
+            //             } else {
+            //                 e.get_mut().push(m);
+            //             }
+            //         }
+            //         Entry::Vacant(e) => {
+            //             e.insert(vec![m]);
+            //         }
+            //     }
+            // }
+            // match blk.entry(key.clone()) {
+            //     Entry::Occupied(mut e) => {
+            //         if CHEKC_BLK {
+            //             let mut found = false;
+            //             for mm in e.get_mut().iter() {
+            //                 if mm.vc == m.vc {
+            //                     found = true;
+            //                     break;
+            //                 }
+            //             }
+            //             if !found {
+            //                 e.get_mut().push(m_cp);
+            //             }
+            //         } else {
+            //             e.get_mut().push(m_cp);
+            //         }
+            //     }
+            //     Entry::Vacant(e) => {
+            //         e.insert(vec![m_cp]);
+            //     }
+            // }
         }
         // println!("black: {}", start.elapsed().as_micros());
         // write to redis
@@ -538,6 +538,7 @@ impl Mesh for CCMeshService {
             vc: serde_json::to_string(&m.vc).unwrap(),
             deps: serde_json::to_string(&m.deps).unwrap(),
             headid: self.id as u32,
+            round: 1,
         };
         self.next.send(next_req).unwrap();
         // rpc_client().server_write(next_req).await.unwrap();
@@ -553,8 +554,9 @@ impl Mesh for CCMeshService {
         &self,
         request: Request<ServerWriteRequest>,
     ) -> Result<Response<()>, Status> {
-        let req: ServerWriteRequest = request.into_inner();
-        if req.headid != ((self.id + 1) % T) as u32 {
+        let mut req: ServerWriteRequest = request.into_inner();
+
+        if req.headid != ((self.id + 1) % T) as u32 && req.round == 1 {
             let vc: VC = serde_json::from_str(&req.vc).unwrap();
             let deps: HashMap<K, VC> = serde_json::from_str(&req.deps).unwrap();
             {
@@ -579,6 +581,16 @@ impl Mesh for CCMeshService {
             // self.print_cache();
             return Ok(Response::new(()));
         }
+        if req.headid != ((self.id + 1) % T) as u32 {
+            self.next.send(req).unwrap();
+            return Ok(Response::new(()));
+        }
+        if req.headid == ((self.id + 1) % T) as u32 && req.round == 1 {
+            req.round = 2;
+            self.next.send(req).unwrap();
+            return Ok(Response::new(()));
+        }
+
         // let req_vc: VC = serde_json::from_slice(&req.vc).unwrap();
         // let req_deps: HashMap<String, VC> = serde_json::from_slice(&req.deps).unwrap();
         let req_vc: VC = serde_json::from_str(&req.vc).unwrap();
