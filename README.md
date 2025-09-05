@@ -1,7 +1,10 @@
 # CausalMesh
 
 This repository contains the prototype system for our VLDB 2025 paper:
-[CausalMesh: A Causal Cache for Stateful Serverless Computing]()
+[CausalMesh: A Causal Cache for Stateful Serverless Computing](https://www.cis.upenn.edu/~sga001/papers/causalmesh-vldb25.pdf).
+
+It also contains code from our extended report which includes a formal verification of the protocol in Dafny.
+The report is available [here](https://arxiv.org/pdf/2508.15647).
 
 
 ## Project Structure
